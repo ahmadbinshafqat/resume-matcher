@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume / Job Match Scorer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3e;
+      --accent: #6c63ff;
+      --accent-light: #8a83ff;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #6c63ff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    /* ── Profile selector ── */
+    .profile-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+    }
+
+    .profile-card:hover {
+      border-color: #4a4770;
+    }
+
+    .profile-card.selected {
+      border-color: var(--accent);
+      background: rgba(108, 99, 255, 0.08);
+    }
+
+    .profile-card input[type="radio"] {
+      display: none;
+    }
+
+    .profile-icon {
+      font-size: 1.8rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .profile-info strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .profile-info span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .profile-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      margin-left: auto;
+      flex-shrink: 0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .profile-card.selected .profile-dot {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    /* ── JD input ── */
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .field textarea {
+      width: 100%;
+      height: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 0.875rem;
+      padding: 1rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+
+    .field textarea:focus { border-color: var(--accent); }
+    .field textarea::placeholder { color: var(--text-muted); }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+
+    button#analyze-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2.5rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button#analyze-btn:hover { background: var(--accent-light); }
+    button#analyze-btn:active { transform: scale(0.97); }
+    button#analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #error-msg {
+      display: none;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* ── Progress panel ── */
+    #progress-panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    #progress-stage {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .progress-bar.indeterminate {
+      width: 40%;
+      animation: slide 1.4s ease-in-out infinite;
+    }
+
+    @keyframes slide {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(350%); }
+    }
+
+    #progress-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    #progress-stats span strong {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Results ── */
+    #results { display: none; }
+
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-ring {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      flex-shrink: 0;
+    }
+
+    .score-ring svg { transform: rotate(-90deg); }
+
+    .score-ring .ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 8;
+    }
+
+    .score-ring .ring-fill {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .score-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.6rem;
+      font-weight: 800;
+    }
+
+    .score-meta h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .score-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .score-meta p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .score-card { flex-direction: column; text-align: center; }
+      .profile-selector { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .tag.green  { background: rgba(34,197,94,0.12);  color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+    .tag.red    { background: rgba(239,68,68,0.12);   color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+    .tag.purple { background: rgba(108,99,255,0.12);  color: #a78bfa; border: 1px solid rgba(108,99,255,0.25); }
+
+    .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .bullet-list li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.55;
+    }
+
+    .bullet-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .full-card { margin-bottom: 1.5rem; }
+
+    .culture-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Job Match Scorer</h1>
+      <p>Select your profile source, paste a job description — AI will score the fit instantly.</p>
+    </header>
+
+    <!-- Profile selector -->
+    <div class="profile-selector">
+      <label class="profile-card selected" id="card-upwork">
+        <input type="radio" name="profile" value="upwork" checked />
+        <div class="profile-icon">💼</div>
+        <div class="profile-info">
+          <strong>Upwork</strong>
+          <span>Use your Upwork profile</span>
+        </div>
+        <div class="profile-dot"></div>
+      </label>
+      <label class="profile-card" id="card-resume">
+        <input type="radio" name="profile" value="resume" />
+        <div class="profile-icon">🌍</div>
+        <div class="profile-info">
+          <strong>Remote Platforms</strong>
+          <span>Use your saved resume</span>
+        </div>
+        <div class="profile-dot"></div>
+      </label>
+    </div>
+
+    <!-- JD input -->
+    <div class="field" style="margin-bottom: 0;">
+      <label>Job Description</label>
+      <textarea id="job-description" placeholder="Paste the job description here..."></textarea>
+    </div>
+
+    <div class="actions">
+      <button id="analyze-btn">
+        <span class="spinner" id="spinner"></span>
+        <span id="btn-label">Analyze Match</span>
+      </button>
+    </div>
+
+    <div id="error-msg"></div>
+
+    <!-- Progress panel -->
+    <div id="progress-panel">
+      <div id="progress-stage">Connecting to AI...</div>
+      <div class="progress-track">
+        <div class="progress-bar indeterminate" id="progress-bar"></div>
+      </div>
+      <div id="progress-stats">
+        <span>⏱ <strong id="stat-elapsed">0.0s</strong> elapsed</span>
+        <span>tokens generated: <strong id="stat-tokens">0</strong></span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results">
+      <div class="score-card">
+        <div class="score-ring">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle class="ring-bg" cx="55" cy="55" r="46"/>
+            <circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="46"
+              stroke-dasharray="289" stroke-dashoffset="289"/>
+          </svg>
+          <div class="score-number" id="score-number">—</div>
+        </div>
+        <div class="score-meta">
+          <h2 id="score-heading">Analyzing…</h2>
+          <div class="score-label" id="score-label-badge"></div>
+          <p id="summary-text"></p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>✅ Matched Skills</h3>
+          <div class="tag-list" id="matched-skills"></div>
+        </div>
+        <div class="card">
+          <h3>⚠️ Missing Skills</h3>
+          <div class="tag-list" id="missing-skills"></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>💪 Strengths</h3>
+          <ul class="bullet-list" id="strengths"></ul>
+        </div>
+        <div class="card">
+          <h3>🎯 Recommendations</h3>
+          <ul class="bullet-list" id="recommendations"></ul>
+        </div>
+      </div>
+
+      <div class="card full-card">
+        <h3>🤝 Culture &amp; Soft Skill Fit</h3>
+        <p class="culture-text" id="culture-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btn         = document.getElementById('analyze-btn');
+    const spinner     = document.getElementById('spinner');
+    const btnLabel    = document.getElementById('btn-label');
+    const errorMsg    = document.getElementById('error-msg');
+    const results     = document.getElementById('results');
+    const progPanel   = document.getElementById('progress-panel');
+    const progBar     = document.getElementById('progress-bar');
+    const progStage   = document.getElementById('progress-stage');
+    const statElapsed = document.getElementById('stat-elapsed');
+    const statTokens  = document.getElementById('stat-tokens');
+
+    // Profile card selection
+    document.querySelectorAll('.profile-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        card.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    function selectedProfile() {
+      return document.querySelector('input[name="profile"]:checked').value;
+    }
+
+    // Progress helpers
+    let elapsedTimer = null;
+    let startTime = null;
+
+    function startElapsedTimer() {
+      startTime = Date.now();
+      elapsedTimer = setInterval(() => {
+        statElapsed.textContent = ((Date.now() - startTime) / 1000).toFixed(1) + 's';
+      }, 100);
+    }
+
+    function stopElapsedTimer() {
+      clearInterval(elapsedTimer);
+      elapsedTimer = null;
+    }
+
+    function showProgress(stage, message) {
+      progPanel.style.display = 'block';
+      progStage.textContent = message || stage;
+      if (stage === 'generating') {
+        progBar.classList.remove('indeterminate');
+      } else {
+        progBar.classList.add('indeterminate');
+      }
+    }
+
+    function updateProgressStats(tokens) {
+      statTokens.textContent = tokens;
+      progBar.style.width = Math.min((tokens / 350) * 100, 95) + '%';
+    }
+
+    function hideProgress() {
+      progBar.style.width = '100%';
+      progBar.classList.remove('indeterminate');
+      setTimeout(() => { progPanel.style.display = 'none'; }, 400);
+    }
+
+    // Results rendering
+    function scoreColor(s) {
+      if (s >= 80) return '#22c55e';
+      if (s >= 60) return '#a78bfa';
+      if (s >= 40) return '#f59e0b';
+      return '#ef4444';
+    }
+
+    function labelColor(label) {
+      return ({ 'Excellent Match': '#22c55e', 'Strong Match': '#86efac',
+                'Good Match': '#a78bfa', 'Partial Match': '#f59e0b',
+                'Weak Match': '#ef4444' })[label] || '#8892a4';
+    }
+
+    function renderTags(id, items, cls) {
+      document.getElementById(id).innerHTML = items.length
+        ? items.map(i => `<span class="tag ${cls}">${i}</span>`).join('')
+        : `<span style="color:var(--text-muted);font-size:.85rem">None identified</span>`;
+    }
+
+    function renderList(id, items) {
+      document.getElementById(id).innerHTML = items.length
+        ? items.map(i => `<li>${i}</li>`).join('')
+        : '<li>None identified</li>';
+    }
+
+    function renderResults(data) {
+      const score = data.overall_score;
+      const color = scoreColor(score);
+      const ring  = document.getElementById('ring-fill');
+      ring.style.stroke = color;
+      setTimeout(() => {
+        ring.style.strokeDashoffset = 289 - (score / 100) * 289;
+      }, 50);
+
+      document.getElementById('score-number').textContent = score;
+      document.getElementById('score-number').style.color = color;
+      document.getElementById('score-heading').textContent = data.score_label;
+
+      const badge = document.getElementById('score-label-badge');
+      const lc = labelColor(data.score_label);
+      badge.textContent = data.score_label;
+      badge.style.cssText = `background:${lc}22;color:${lc};border:1px solid ${lc}44`;
+
+      document.getElementById('summary-text').textContent = data.summary;
+      document.getElementById('culture-text').textContent = data.culture_fit_notes;
+
+      renderTags('matched-skills', data.matched_skills, 'green');
+      renderTags('missing-skills', data.missing_skills, 'red');
+      renderList('strengths',       data.strengths);
+      renderList('recommendations', data.recommendations);
+
+      results.style.display = 'block';
+    }
+
+    // SSE reader
+    async function* readSSE(response) {
+      const reader  = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const events = buf.split('\n\n');
+        buf = events.pop();
+        for (const raw of events) {
+          if (!raw.trim()) continue;
+          const eventLine = raw.split('\n').find(l => l.startsWith('event:'));
+          const dataLine  = raw.split('\n').find(l => l.startsWith('data:'));
+          if (!dataLine) continue;
+          yield {
+            event: eventLine ? eventLine.slice(6).trim() : 'message',
+            data:  JSON.parse(dataLine.slice(5).trim()),
+          };
+        }
+      }
+    }
+
+    btn.addEventListener('click', async () => {
+      const jobDescription = document.getElementById('job-description').value.trim();
+      const profileType    = selectedProfile();
+
+      errorMsg.style.display  = 'none';
+      results.style.display   = 'none';
+
+      if (!jobDescription) {
+        errorMsg.textContent    = 'Please paste a job description.';
+        errorMsg.style.display  = 'block';
+        return;
+      }
+
+      btn.disabled            = true;
+      spinner.style.display   = 'block';
+      btnLabel.textContent    = 'Analyzing…';
+      statElapsed.textContent = '0.0s';
+      statTokens.textContent  = '0';
+      showProgress('connecting', 'Connecting to AI...');
+      startElapsedTimer();
+
+      try {
+        const res = await fetch('/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile_type: profileType, job_description: jobDescription }),
+        });
+
+        for await (const { event, data } of readSSE(res)) {
+          if (event === 'status') {
+            showProgress(data.stage, data.message);
+          } else if (event === 'progress') {
+            showProgress('generating', `Generating analysis... (${data.elapsed}s)`);
+            updateProgressStats(data.tokens);
+          } else if (event === 'done') {
+            stopElapsedTimer();
+            hideProgress();
+            renderResults(data);
+          } else if (event === 'error') {
+            stopElapsedTimer();
+            hideProgress();
+            errorMsg.textContent   = data.error;
+            errorMsg.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        stopElapsedTimer();
+        hideProgress();
+        errorMsg.textContent   = 'Something went wrong. Please try again.';
+        errorMsg.style.display = 'block';
+      } finally {
+        btn.disabled          = false;
+        spinner.style.display = 'none';
+        btnLabel.textContent  = 'Analyze Match';
+      }
+    });
+  </script>
+</body>
+</html>

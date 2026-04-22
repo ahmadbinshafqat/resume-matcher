@@ -1,0 +1,90 @@
+[
+  {
+    "id": "job-001",
+    "title": "Senior Full Stack Developer",
+    "company": "NovaSaaS",
+    "location": "Remote",
+    "type": "Full-time",
+    "salary": "$90k–$130k",
+    "posted_days_ago": 1,
+    "tags": ["Python", "FastAPI", "React", "AWS", "PostgreSQL"],
+    "description": "NovaSaaS is a fast-growing B2B platform serving 500+ enterprise clients. We are looking for a Senior Full Stack Developer to own core product features end-to-end.\n\nResponsibilities:\n- Design and build scalable RESTful APIs with Python and FastAPI\n- Develop responsive frontends with React and TypeScript\n- Optimize PostgreSQL schemas and queries for high-volume data\n- Deploy and manage infrastructure on AWS (EC2, RDS, ECS, Lambda)\n- Drive technical decisions and mentor junior engineers\n- Participate in Agile sprints, code reviews, and architecture discussions\n\nRequirements:\n- 5+ years of full-stack development experience\n- Strong Python backend skills (FastAPI, Django, or Flask)\n- Proficient in React and TypeScript with Redux or Zustand\n- Experience with relational databases (PostgreSQL preferred)\n- Solid understanding of Docker, CI/CD, and cloud deployments\n- Excellent written and verbal communication\n\nNice to have:\n- Experience with Celery and Redis for background jobs\n- GraphQL API design\n- Prior SaaS or fintech domain experience"
+  },
+  {
+    "id": "job-002",
+    "title": "Senior Backend Engineer — AI Platform",
+    "company": "Cognify Labs",
+    "location": "Remote",
+    "type": "Full-time",
+    "salary": "$110k–$160k",
+    "posted_days_ago": 2,
+    "tags": ["Python", "FastAPI", "LLMs", "OpenAI", "Snowflake", "AWS"],
+    "description": "Cognify Labs builds AI-native analytics tools for enterprise data teams. We need a Senior Backend Engineer who can architect and scale the systems behind our LLM-powered platform.\n\nResponsibilities:\n- Build and maintain high-performance Python APIs using FastAPI\n- Integrate LLM providers (OpenAI, Anthropic) into production pipelines\n- Design data models and pipelines on Snowflake for analytics workloads\n- Implement secure, multi-tenant architecture on AWS\n- Collaborate with ML engineers to productionize model inference\n- Own reliability, observability, and incident response for backend services\n\nRequirements:\n- 6+ years of backend Python development\n- Production experience with LLM APIs (OpenAI, function calling, embeddings)\n- Familiarity with Snowflake or similar analytical data warehouses\n- Strong knowledge of AWS services (Lambda, ECS, RDS, IAM)\n- Experience with async Python and streaming APIs\n\nNice to have:\n- Vector databases (Pinecone, pgvector)\n- Prompt engineering and RAG architecture experience\n- Prior fintech or data-platform background"
+  },
+  {
+    "id": "job-003",
+    "title": "Lead Frontend Engineer",
+    "company": "Launchpad Digital",
+    "location": "Remote / Hybrid",
+    "type": "Full-time",
+    "salary": "$100k–$140k",
+    "posted_days_ago": 3,
+    "tags": ["React", "Next.js", "TypeScript", "GraphQL", "Performance"],
+    "description": "Launchpad Digital delivers high-traffic consumer products used by millions globally. We are seeking a Lead Frontend Engineer to set the technical direction for our React-based platform.\n\nResponsibilities:\n- Lead frontend architecture decisions across multiple product teams\n- Build and maintain performant Next.js applications with TypeScript\n- Establish component library standards and design system integration\n- Drive Core Web Vitals improvements (LCP, CLS, INP)\n- Partner with backend engineers to design GraphQL schemas and API contracts\n- Mentor a team of 4–6 frontend engineers\n\nRequirements:\n- 7+ years of frontend development; 3+ years with React in production\n- Deep Next.js knowledge (SSR, SSG, ISR, App Router)\n- TypeScript expert — strict mode, generics, utility types\n- Strong understanding of browser performance, bundle optimization, and caching\n- Experience with GraphQL clients (Apollo or urql)\n\nNice to have:\n- Experience with Webpack or Vite build tooling\n- React Native or cross-platform mobile exposure\n- Prior experience leading a frontend team"
+  },
+  {
+    "id": "job-004",
+    "title": "Senior Full Stack Engineer — Fintech",
+    "company": "ClearLedger",
+    "location": "Remote",
+    "type": "Full-time",
+    "salary": "$115k–$155k",
+    "posted_days_ago": 4,
+    "tags": ["Python", "Django", "React", "PostgreSQL", "Docker", "AWS"],
+    "description": "ClearLedger provides real-time financial data infrastructure for banking and investment firms. We are hiring a Senior Full Stack Engineer to help scale our compliance-critical systems.\n\nResponsibilities:\n- Extend our Django/DRF backend APIs serving financial data at scale\n- Build React dashboards for complex data visualization\n- Design and optimize PostgreSQL schemas handling millions of transactions\n- Implement strict security and auditability requirements (SOC 2)\n- Own CI/CD pipelines via GitHub Actions and deploy to AWS\n- Lead code reviews and contribute to engineering best practices\n\nRequirements:\n- 5+ years of full-stack development in Python and JavaScript\n- Strong Django REST Framework experience\n- React with TypeScript for production dashboards\n- PostgreSQL performance tuning — indexes, query plans, partitioning\n- Docker and containerized deployments\n- Understanding of fintech compliance requirements is a plus\n\nNice to have:\n- Celery for background financial processing\n- Experience with regulated industries (banking, insurance)\n- AWS security services (IAM, Secrets Manager, KMS)"
+  },
+  {
+    "id": "job-005",
+    "title": "Senior Python Developer — Healthcare SaaS",
+    "company": "MedFlow Systems",
+    "location": "Remote",
+    "type": "Full-time",
+    "salary": "$95k–$125k",
+    "posted_days_ago": 5,
+    "tags": ["Python", "Django", "React", "Celery", "PostgreSQL", "HIPAA"],
+    "description": "MedFlow Systems builds workflow automation software for radiology and healthcare administration. We need a Senior Python Developer to own critical backend features on our HIPAA-compliant platform.\n\nResponsibilities:\n- Build and maintain Django backend services and REST APIs\n- Implement background processing with Celery and Redis\n- Develop secure authentication flows including OAuth 2.0\n- Collaborate with frontend engineers on React UI integration\n- Ensure HIPAA compliance across data storage and transmission\n- Write comprehensive test suites (PyTest, 90%+ coverage target)\n\nRequirements:\n- 5+ years Python development; 3+ years with Django\n- Experience building HIPAA or SOC 2 compliant systems\n- Celery and Redis for async background processing\n- OAuth 2.0 / OpenID Connect implementation experience\n- Strong automated testing discipline (TDD preferred)\n\nNice to have:\n- Prior healthcare or radiology domain knowledge\n- AWS deployments with CircleCI or GitHub Actions\n- Real-time features (WebSockets, SSE, long polling)"
+  },
+  {
+    "id": "job-006",
+    "title": "Staff Software Engineer",
+    "company": "Altitude Labs",
+    "location": "Remote-first",
+    "type": "Full-time",
+    "salary": "$140k–$190k",
+    "posted_days_ago": 6,
+    "tags": ["Python", "Node.js", "React", "AWS", "Kubernetes", "Architecture"],
+    "description": "Altitude Labs is a remote-first product studio building 0→1 products for enterprise clients. We need a Staff Engineer who can own architecture, lead a cross-functional team, and ship high-quality software under real deadlines.\n\nResponsibilities:\n- Define technical architecture for new product initiatives\n- Lead a team of 4–8 engineers across frontend and backend\n- Drive decisions on tech stack, infrastructure, and engineering process\n- Build scalable services in Python (FastAPI/Django) and Node.js (NestJS)\n- Oversee AWS infrastructure and Kubernetes cluster management\n- Mentor senior engineers and establish engineering culture\n\nRequirements:\n- 8+ years of software engineering experience\n- Proven track record leading teams across full product lifecycles\n- Expertise in both Python and Node.js/TypeScript ecosystems\n- AWS architecture (multi-service, cross-region deployments)\n- Kubernetes in production\n- Strong communication for stakeholder management and client-facing work\n\nNice to have:\n- Experience across multiple domains (fintech, healthcare, SaaS)\n- Background in startup or agency environments\n- Technical writing and ADR (Architecture Decision Record) experience"
+  },
+  {
+    "id": "job-007",
+    "title": "Full Stack Developer — Node.js & React",
+    "company": "Shopwave",
+    "location": "Remote",
+    "type": "Full-time",
+    "salary": "$80k–$110k",
+    "posted_days_ago": 7,
+    "tags": ["Node.js", "NestJS", "React", "MongoDB", "GraphQL"],
+    "description": "Shopwave is a modern e-commerce infrastructure company. We're growing our engineering team and need a Full Stack Developer comfortable across the entire stack.\n\nResponsibilities:\n- Build and maintain NestJS microservices for order management, inventory, and payments\n- Develop React storefronts with a focus on performance and accessibility\n- Design GraphQL schemas and resolvers\n- Manage MongoDB data models and optimize queries\n- Integrate third-party payment gateways (Stripe, Braintree)\n- Write unit and integration tests with Jest and Cypress\n\nRequirements:\n- 4+ years of full-stack development\n- Strong Node.js with NestJS or Express\n- React with modern hooks and functional component patterns\n- GraphQL API design and consumption\n- MongoDB data modeling\n- Stripe or equivalent payment integration experience\n\nNice to have:\n- Redis caching strategies\n- Next.js for server-side-rendered storefronts\n- E-commerce domain knowledge"
+  },
+  {
+    "id": "job-008",
+    "title": "Senior Software Engineer — Remote Startup",
+    "company": "VelocityHQ",
+    "location": "Fully Remote",
+    "type": "Full-time",
+    "salary": "$85k–$120k",
+    "posted_days_ago": 2,
+    "tags": ["Python", "React", "TypeScript", "Docker", "CI/CD", "Startup"],
+    "description": "VelocityHQ is an early-stage SaaS startup (Series A) building developer productivity tools. We're looking for a senior engineer who thrives in ambiguity, moves fast, and cares about craft.\n\nResponsibilities:\n- Take ownership of full features from design through deployment\n- Build backend services in Python (Flask or FastAPI) and frontend in React/TypeScript\n- Set up and maintain CI/CD pipelines (GitHub Actions)\n- Containerize services with Docker; deploy to cloud providers\n- Contribute to product decisions and engineering culture in a small team\n- Handle customer-reported bugs rapidly in a fast-feedback environment\n\nRequirements:\n- 5+ years of professional software engineering experience\n- Comfortable across the full stack — backend APIs and React frontends\n- Production Python experience (Flask, FastAPI, or Django)\n- React with TypeScript; comfortable with state management\n- Docker and CI/CD experience\n- Startup mindset — autonomous, pragmatic, low-ego\n\nNice to have:\n- Prior Series A or early-stage startup experience\n- Experience with developer tooling or platform products\n- Interest in AI-assisted development workflows"
+  }
+]

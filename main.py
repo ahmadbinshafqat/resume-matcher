@@ -30,7 +30,7 @@ PROFILES = {
     "resume": "RESUME_PROFILE",
 }
 
-JOBS_FILE = Path(__file__).parent / "profiles" / "jobs.json"
+JOBS_FILE = Path(__file__).parent / "jobs.json"
 
 SYSTEM_PROMPT = """You are an expert technical recruiter. Analyze profile-to-job fit.
 Respond with valid JSON only — no markdown, no extra text. Use exactly this schema:
